@@ -8,15 +8,14 @@ primary_region = 'gig'
 [env]
   RUST_LOG = "info"
 
-# Configure as a background worker instead of an HTTP service
+# Run as a single process
 [processes]
-  app = "/usr/local/bin/argentum-bot"
+  app = "./target/release/argentum-bot"
 
 [[vm]]
   cpu_kind = 'shared'
   cpus = 1
   memory_mb = 256
-  processes = ['app']
 
 # Keep the bot running continuously
 [deploy]
