@@ -1,0 +1,14 @@
+[package]
+name = "argentum-bot"
+version = "0.1.0"
+edition = "2021"
+authors = ["Hugo"]
+description = "A Telegram bot for RPG dice rolling"
+
+[dependencies]
+teloxide = { version = "0.13", features = ["macros"] }
+die-sir = "0.1.0"
+tokio = { version = "1.36", features = ["full"] }
+log = "0.4"
+pretty_env_logger = "0.5"
+dotenvy = "0.15" 
