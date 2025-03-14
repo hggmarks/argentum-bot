@@ -1,26 +1,24 @@
-# fly.toml app configuration file generated for argentum-bot on 2025-03-14T03:02:36Z
-#
-# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
-#
-
+# fly.toml app configuration file for argentum-bot
 app = 'argentum-bot'
 primary_region = 'gig'
 
 [build]
+  dockerfile = "Dockerfile"
 
 [env]
-  PORT = '8080'
+  RUST_LOG = "info"
 
-[http_service]
-  internal_port = 8080
-  force_https = true
-  auto_stop_machines = 'stop'
-  auto_start_machines = true
-  min_machines_running = 0
-  processes = ['app']
+# Configure as a background worker instead of an HTTP service
+[processes]
+  app = "/usr/local/bin/argentum-bot"
 
 [[vm]]
-  memory = '1gb'
   cpu_kind = 'shared'
   cpus = 1
   memory_mb = 256
+  processes = ['app']
+
+# Keep the bot running continuously
+[deploy]
+  strategy = 'immediate'
+  min_machines_running = 1

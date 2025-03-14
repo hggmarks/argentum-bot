@@ -11,10 +11,16 @@ COPY --from=planner /app/recipe.json recipe.json
 RUN cargo chef cook --release --recipe-path recipe.json
 # Build application
 COPY . .
-RUN cargo build --release --bin argentum-bot
+RUN cargo build --release
 
 # We do not need the Rust toolchain to run the binary!
 FROM debian:bookworm-slim AS runtime
 WORKDIR /app
-COPY --from=builder /app/target/release/argentum-bot /usr/local/bin
-ENTRYPOINT ["/usr/local/bin/argentum-bot"]
+RUN apt-get update && apt-get install -y ca-certificates && rm -rf /var/lib/apt/lists/*
+COPY --from=builder /app/target/release/argentum-bot /usr/local/bin/argentum-bot
+
+# Create a non-root user to run the application
+RUN useradd -m -U -s /bin/false argentum
+USER argentum
+
+CMD ["/usr/local/bin/argentum-bot"]
